@@ -45,7 +45,7 @@ namespace WpfApp1
 
 			Bitmap bmp = curve2d.CreateImage();
             //bmp.Save(Response.OutputStream,ImageFormat.Jpeg);
-            bmp.Save(@"C:\Users\weizsw\Curve.jpg", ImageFormat.Jpeg);
+            bmp.Save(@"D:\Curve.bmp", ImageFormat.Bmp);
             //CreateImage();
         }
 
@@ -55,8 +55,8 @@ namespace WpfApp1
             private Graphics labelObj; 
 			private Bitmap objBitmap; //graph obejct
 
-			private int m_Width = 900; //graph width
-			private int m_Height = 500; //graph height
+			private int m_Width = 1920; //graph width
+			private int m_Height = 1080; //graph height
 			private float m_XSlice = 50; //Xaxis mark width
 			private float m_YSlice = 50; //Yaxis mark width
 			private float m_YSliceValue = 2; //Yaxis value 
@@ -64,9 +64,9 @@ namespace WpfApp1
 			private float m_Tension = 0.5f;
 			private string m_Title = "test"; //Title
 			private string m_Unit = "unit"; //unite
-			private string m_XAxisText = "Time(s)"; //Xaxis text
+			private string m_XAxisText = "Time(min)"; //Xaxis text
 			private string m_YAxisText = "Intensity"; //Yaxis text
-			private string[] m_Keys = new string[]{"0","10","20","30","40","50","60","70","80","90","100","110"}; //Xaxis value 
+			private string[] m_Keys = new string[]{"","10","20","30","40","50","60","70","80","90","100","110"}; //Xaxis value 
 			private float[] m_Values = new float[]{2.0f,2.5f,5f,5.54f,2.16f,1.28f,6.0f,3.64f,3.0f,5.64f,4.58f,6.65f}; //Yaxis value
 			private Color m_BgColor = Color.Snow; //background color
 			private Color m_TextColor = Color.Black; //text color
@@ -399,17 +399,11 @@ namespace WpfApp1
 				objGraphics.DrawString(XAxisText,new Font("Arial",8),new SolidBrush(AxisTextColor),Width/2 - 50,Height - 50);
 
 				int X = 30;
-				int Y = (Height/2) - 100;
-			   	//for(int i = 0;i < YAxisText.Length;i++)
-				//{
-					//objGraphics.DrawString(YAxisText[i].ToString(),new Font("Arial",8),new SolidBrush(AxisTextColor),X,Y);
-					//Y += 15;
-				//}
-                			
-             
-                labelObj.TranslateTransform(-130, 300);
+				int Y = (Height/2) - 100;           
+
+                labelObj.TranslateTransform(20, Height/2);
                 labelObj.RotateTransform(-90);
-				labelObj.DrawString(YAxisText,new Font("Arial",8),new SolidBrush(AxisTextColor),X-30,Y);
+                labelObj.DrawString(YAxisText, new Font("Arial",8),new SolidBrush(AxisTextColor), 0, 0);
 				
 			}
 
@@ -432,11 +426,11 @@ namespace WpfApp1
 
 					if(iCount == 5)
 					{
-						objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor)),x1+Scale,y1,x2+Scale,y2);
+						objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor)),x1+Scale,y1+10,x2+Scale,y2);
 						//The Point!这里显示X轴刻度
 						if(iSliceCount <= Keys.Length-1)
 						{
-							objGraphics.DrawString(Keys[iSliceCount].ToString(),new Font("Arial",10),new SolidBrush(SliceTextColor),x1 + Scale - 15,y2);
+							objGraphics.DrawString(Keys[iSliceCount].ToString(),new Font("Arial",10),new SolidBrush(SliceTextColor),x1 + Scale - 15,y2 + 10);
 						}
 						else
 						{
@@ -451,7 +445,7 @@ namespace WpfApp1
 					}
 					else
 					{
-						objGraphics.DrawLine(new Pen(new SolidBrush(SliceColor)),x1+Scale,y1+5,x2+Scale,y2-5);
+						//objGraphics.DrawLine(new Pen(new SolidBrush(SliceColor)),x1+Scale,y1+5,x2+Scale,y2-5);
 					}
 					iCount++;
 				}
@@ -477,7 +471,7 @@ namespace WpfApp1
 
 					if(iCount == 5)
 					{
-						objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor)),x1 - 5, y1 - Scale,x2 + 5,y2 - Scale);
+						objGraphics.DrawLine(new Pen(new SolidBrush(AxisColor)),x1 - 5, y1 - Scale,x2 + 5 - 10,y2 - Scale);
 						//The Point!这里显示Y轴刻度
 						objGraphics.DrawString(Convert.ToString(YSliceValue * iSliceCount+YSliceBegin),new Font("Arial",10),new SolidBrush(SliceTextColor),60,y1 - Scale );
 
@@ -486,7 +480,7 @@ namespace WpfApp1
 					}
 					else
 					{
-						objGraphics.DrawLine(new Pen(new SolidBrush(SliceColor)),x1,y1 - Scale,x2,y2 - Scale);
+						//objGraphics.DrawLine(new Pen(new SolidBrush(SliceColor)),x1,y1 - Scale,x2,y2 - Scale);
 					}
 					iCount ++;
 				}
@@ -494,27 +488,50 @@ namespace WpfApp1
 
 			private void DrawContent(ref Graphics objGraphics)
 			{
-				if(Keys.Length == Values.Length)
-				{
-					Pen CurvePen = new Pen(CurveColor,1);
-					PointF[] CurvePointF = new PointF[Keys.Length];
-					float keys = 0;
-					float values = 0;
-					float Offset1 = (Height-100) + YSliceBegin;
-					float Offset2 = (YSlice/50)*(50/YSliceValue);
+			//	if(Keys.Length == Values.Length)
+			//	{
+			//		Pen CurvePen = new Pen(CurveColor,1);
+			//		PointF[] CurvePointF = new PointF[Keys.Length];
+			//		float keys = 0;
+			//		float values = 0;
+			//		float Offset1 = (Height-100) + YSliceBegin;
+			//		float Offset2 = (YSlice/50)*(50/YSliceValue);
 
-					for(int i=0;i<Keys.Length;i++)
-					{
-						keys = XSlice*i+100;
-						values = Offset1 - Values[i]*Offset2;
-						CurvePointF[i] = new PointF(keys,values);
-					}
-					objGraphics.DrawCurve(CurvePen,CurvePointF,Tension);
-				}
-				else
-				{
-					objGraphics.DrawString("Error!The length of Keys and Values must be same!",new Font("Arial",16),new SolidBrush(TextColor),new System.Drawing.Point(150,Height/2));
-				}
+			//		for(int i=0;i<Keys.Length;i++)
+			//		{
+			//			keys = XSlice*i+100;
+			//			values = Offset1 - Values[i]*Offset2;
+			//			CurvePointF[i] = new PointF(keys,values);
+			//		}
+			//		objGraphics.DrawCurve(CurvePen,CurvePointF,Tension);
+			//	}
+			//	else
+			//	{
+			//		objGraphics.DrawString("Error!The length of Keys and Values must be same!",new Font("Arial",16),new SolidBrush(TextColor),new System.Drawing.Point(150,Height/2));
+			//	}
+
+                if(Keys.Length == Values.Length)
+				    {
+					    Pen CurvePen = new Pen(CurveColor,1);
+					    PointF[] CurvePointF = new PointF[Keys.Length];
+					    float keys = 0;
+					    float values = 0;
+					    float Offset1 = (Height-100) + YSliceBegin;
+					    float Offset2 = (YSlice/50)*(50/YSliceValue);
+
+					    for(int i=0;i<Keys.Length;i++)
+					    {
+						    keys = i + 100;
+						    values = Offset1 - Values[i]*Offset2;
+						    CurvePointF[i] = new PointF(keys,values);
+					    }
+					    objGraphics.DrawCurve(CurvePen,CurvePointF,Tension);
+				    }
+				    else
+				    {
+					    objGraphics.DrawString("Error!The length of Keys and Values must be same!",new Font("Arial",16),new SolidBrush(TextColor),new System.Drawing.Point(150,Height/2));
+				    }
+
 			}
 
 			//initilize titler
